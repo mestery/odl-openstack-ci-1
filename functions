@@ -111,7 +111,8 @@ LOG_COLOR=False
 RECLONE=yes
 GIT_TIMEOUT=0
 
-HOST_IP=$(ip addr | grep inet | grep $IFACE_NAME | awk -F" " '{print $2}'| sed -e 's/\/.*$//')
+IFACE_NAME=enp0s8
+HOST_IP=$(ip addr | grep inet | grep enp0s8 | awk -F" " '{print $2}'| sed -e 's/\/.*$//')
 HOST_NAME=$(hostname)
 SERVICE_HOST=\$HOST_IP
 SERVICE_HOST_NAME=\$HOST_NAME
@@ -164,15 +165,6 @@ NEUTRON_REPO=https://$GERRIT_HOST/$GERRIT_PROJECT
 NEUTRON_BRANCH=$GERRIT_REFSPEC
 EOLLC
     fi
-
-    cat <<EOLLC >> local.conf
-
-[[post-config|/etc/neutron/plugins/ml2/ml2_conf.ini]]
-[ml2_odl]
-url=http://\$SERVICE_HOST:8080/controller/nb/v2/neutron
-username=admin
-password=admin
-EOLLC
 
     echo-step "Local.conf is..."
     cat local.conf
