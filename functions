@@ -153,7 +153,7 @@ Q_PLUGIN=ml2
 Q_ML2_PLUGIN_MECHANISM_DRIVERS=logger,opendaylight
 ODL_MGR_IP=\$SERVICE_HOST
 ODL_ARGS="-Xmx1024m -XX:MaxPermSize=512m"
-ODL_BOOT_WAIT=90
+ODL_BOOT_WAIT=15
 
 ENABLE_TENANT_TUNNELS=True
 
@@ -195,9 +195,19 @@ function run-tempest {
         echo "Running tempest tests:" > $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
         testr init > /dev/null 2>&1 || true
-        cmd="testr run  tempest.api.network.test_networks"
-        echo "opendaylight-test:$ "${cmd}  >> $TEMPEST_RUN_LOG
-        ${cmd} >> $TEMPEST_RUN_LOG
+        cmd_api="testr run tempest.api.network.test_networks"
+        cmd_net_basic="testr run tempest.scenario.test_network_basic_ops"
+        cmd_net_adv="testr run tempest.scenario.test_network_advanced_server_ops"
+        echo "opendaylight-test:$ "${cmd_api}  >> $TEMPEST_RUN_LOG
+        ${cmd_api} >> $TEMPEST_RUN_LOG
+        echo "" >> $TEMPEST_RUN_LOG
+        echo "" >> $TEMPEST_RUN_LOG
+        echo "opendaylight-test:$ "${cmd_net_basic}  >> $TEMPEST_RUN_LOG
+        ${cmd_net_basic} >> $TEMPEST_RUN_LOG
+        echo "" >> $TEMPEST_RUN_LOG
+        echo "" >> $TEMPEST_RUN_LOG
+        echo "opendaylight-test:$ "${cmd_net_adv}  >> $TEMPEST_RUN_LOG
+        ${cmd_net_adv} >> $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
 
@@ -253,3 +263,23 @@ function archive-logs {
 
 }
 
+function test-branch {
+  if [ "$GERRIT_PROJECT" != "" ]; then
+    export GERRIT_HOST=review.openstack.org
+    export GERRIT_PROJECT=openstack/neutron
+
+    # Read in NEUTRON_BRANCH if it's not set
+    if [ "$GERRIT_REFSPEC" == "" ]; then
+      echo "Please enter the branch you want to test: "
+      read GERRIT_REFSPEC
+    fi
+
+    echo "Variables set:"
+    echo "GERRIT_PROJECT: $GERRIT_PROJECT"
+    echo "GERRIT_HOST: $GERRIT_HOST"
+    echo "GERRIT_PROJECT: $GERRIT_PROJECT"
+    echo "GERRIT_REFSPEC: $GERRIT_REFSPEC"
+  else
+    echo "Not testing specific branch, working with origin/master."
+  fi
+}

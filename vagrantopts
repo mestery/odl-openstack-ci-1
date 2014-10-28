@@ -5,5 +5,5 @@
 
 export WORKSPACE="/home/vagrant"
 export BUILD_TAG="jenkins-openstack-gerrit-1"
-export IFACE_NAME='eth1'
+export IFACE_NAME='enp0s8'
 export BUILD_ID='2014-06-07_18-18-59'

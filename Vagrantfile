@@ -9,8 +9,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "private_network", ip: "192.168.56.10"
 
   config.vm.provider "virtualbox" do |vb|
-      vb.cpus = 2
-      vb.memory = 4096
+      vb.cpus = 4
+      vb.memory = 6144
   end
 
   config.vm.provision "shell", path: "bootstrap.sh"
