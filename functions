@@ -192,7 +192,6 @@ function unstack {
 }
 
 function run-tempest {
-    cmd_api=$1
     # Run a Tempest test and log results
     echo-step "Running Tempest"
     if [[ -n ${BUILD_ID} ]]; then
@@ -201,15 +200,16 @@ function run-tempest {
         echo "Running tempest tests:" > $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
         testr init > /dev/null 2>&1 || true
-        #cmd_api="testr run tempest.api.network.test_networks"
-        #cmd_net_basic="testr run tempest.scenario.test_network_basic_ops"
-        #cmd_net_adv="testr run tempest.scenario.test_network_advanced_server_ops"
-        echo "opendaylight-test:$ "${cmd_api}  >> $TEMPEST_RUN_LOG
-        ${cmd_api} >> $TEMPEST_RUN_LOG
+        cmd_api="tempest.api.network.test_networks"
+        cmd_net_basic="tempest.scenario.test_network_basic_ops"
+        cmd_net_adv="tempest.scenario.test_network_advanced_server_ops"
+        cmd="testr run $cmd_api $cmd_net_basic"
+        echo "opendaylight-test:$ "${cmd}  >> $TEMPEST_RUN_LOG
+        ${cmd} >> $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
 
-        x=$(grep "id=" $TEMPEST_RUN_LOG)
+        x=$(grep "(id=" $TEMPEST_RUN_LOG)
         y="${x//[()=]/ }"
         z=$(echo ${y} | awk '{print $3}' | sed 's/\,//g')
 
