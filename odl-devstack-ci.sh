@@ -29,4 +29,7 @@ install-devstack
 # https://bugs.launchpad.net/devstack/+bug/1276297
 sudo rm -rf /usr/lib/python2.7/site-packages/oslo*
 stack
-run-tempest
+run-tempest "testr run tempest.api.network.test_networks"
+run-tempest "testr run tempest.scenario.test_network_basic_ops"
+#run-tempest "testr run tempest.scenario.test_network_advanced_server_ops"
+unstack

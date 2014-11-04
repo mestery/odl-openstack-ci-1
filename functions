@@ -186,7 +186,13 @@ function stack {
     fi
 }
 
+function unstack {
+    echo-step "Unstacking"
+    ./unstack.sh > /dev/null
+}
+
 function run-tempest {
+    cmd_api=$1
     # Run a Tempest test and log results
     echo-step "Running Tempest"
     if [[ -n ${BUILD_ID} ]]; then
@@ -195,19 +201,11 @@ function run-tempest {
         echo "Running tempest tests:" > $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
         testr init > /dev/null 2>&1 || true
-        cmd_api="testr run tempest.api.network.test_networks"
-        cmd_net_basic="testr run tempest.scenario.test_network_basic_ops"
-        cmd_net_adv="testr run tempest.scenario.test_network_advanced_server_ops"
+        #cmd_api="testr run tempest.api.network.test_networks"
+        #cmd_net_basic="testr run tempest.scenario.test_network_basic_ops"
+        #cmd_net_adv="testr run tempest.scenario.test_network_advanced_server_ops"
         echo "opendaylight-test:$ "${cmd_api}  >> $TEMPEST_RUN_LOG
         ${cmd_api} >> $TEMPEST_RUN_LOG
-        echo "" >> $TEMPEST_RUN_LOG
-        echo "" >> $TEMPEST_RUN_LOG
-        echo "opendaylight-test:$ "${cmd_net_basic}  >> $TEMPEST_RUN_LOG
-        ${cmd_net_basic} >> $TEMPEST_RUN_LOG
-        echo "" >> $TEMPEST_RUN_LOG
-        echo "" >> $TEMPEST_RUN_LOG
-        echo "opendaylight-test:$ "${cmd_net_adv}  >> $TEMPEST_RUN_LOG
-        ${cmd_net_adv} >> $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
 
@@ -220,7 +218,7 @@ function run-tempest {
         echo "List of tempest tests ran (id="${z}"):" >> $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
 
-        grep -ri successful   .testrepository/${z}  |  awk '{ gsub(/\[/, "\ ");  print $1 " " $2}' >> $TEMPEST_RUN_LOG
+        grep -ri successful:   .testrepository/${z}  |  awk '{ gsub(/\[/, "\ ");  print $1 " " $2}' >> $TEMPEST_RUN_LOG
     fi
 }
 
