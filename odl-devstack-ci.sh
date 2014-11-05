@@ -30,4 +30,3 @@ install-devstack
 sudo rm -rf /usr/lib/python2.7/site-packages/oslo*
 stack
 run-tempest
-unstack
