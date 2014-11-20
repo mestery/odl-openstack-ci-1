@@ -159,6 +159,14 @@ ENABLE_TENANT_TUNNELS=True
 
 EOLLC
 
+    if [ "$ODL_URL" != "" ]; then
+        cat <<EOLLC >> local.conf
+ODL_URL=$ODL_URL
+ODL_PKG=$ODL_PKG
+ODL_NAME=$ODL_NAME
+EOLLC
+    fi
+
     if [ "$GERRIT_PROJECT" == "openstack/neutron" ]; then
         cat <<EOLLC >> local.conf
 NEUTRON_REPO=https://$GERRIT_HOST/$GERRIT_PROJECT
