@@ -20,7 +20,7 @@ function run() {
 function cleanup {
     run sudo rm -r $DEVSTACKDIR
     run sudo rm -r /opt/stack/tempest
-    run sudo rm -rf /usr/lib/python2.7/site-packages/*keystoneclient*
+    run sudo rm -rf /usr/lib/python2.7/site-packages/*client*
 }
 
 function check-env {
