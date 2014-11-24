@@ -20,6 +20,7 @@ function run() {
 function cleanup {
     run sudo rm -r $DEVSTACKDIR
     run sudo rm -r /opt/stack/tempest
+    run sudo rm -rf /usr/lib/python2.7/site-packages/*client*
 }
 
 function check-env {
@@ -158,6 +159,14 @@ ODL_BOOT_WAIT=15
 ENABLE_TENANT_TUNNELS=True
 
 EOLLC
+
+    if [ "$ODL_URL" != "" ]; then
+        cat <<EOLLC >> local.conf
+ODL_URL=$ODL_URL
+ODL_PKG=$ODL_PKG
+ODL_NAME=$ODL_NAME
+EOLLC
+    fi
 
     if [ "$GERRIT_PROJECT" == "openstack/neutron" ]; then
         cat <<EOLLC >> local.conf
