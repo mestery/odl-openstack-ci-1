@@ -90,7 +90,7 @@ function install-devstack {
     echo-step "Cloning Devstack"
     cd $DEVSTACKDIR
 
-    if [ "$GERRIT_PROJECT" == "openstack/devstack" ]; then
+    if [ "$GERRIT_PROJECT" == "openstack-dev/devstack" ]; then
         echo-step "This is a Devstack patch - cloning into $GERRIT_REFSPEC"
         run git fetch https://$GERRIT_HOST/$GERRIT_PROJECT $GERRIT_REFSPEC
         run git checkout FETCH_HEAD
