@@ -23,7 +23,7 @@ prepare-environment
 configure-firewall
 install-packages
 install-pip
-install-tempest
+#install-tempest
 install-devstack
 # Workaround for bug:
 # https://bugs.launchpad.net/devstack/+bug/1276297

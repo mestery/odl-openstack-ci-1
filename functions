@@ -19,7 +19,7 @@ function run() {
 
 function cleanup {
     run sudo rm -r $DEVSTACKDIR
-    run sudo rm -r /opt/stack/tempest
+    #run sudo rm -r /opt/stack/tempest
     run sudo rm -rf /usr/lib/python2.7/site-packages/*client*
 }
 
@@ -135,6 +135,12 @@ ADMIN_PASSWORD=admin
 disable_service rabbit
 enable_service qpid
 
+disable_service swift
+disable_service cinder
+disable_service c-sch
+disable_service c-api
+disable_service c-vol
+
 enable_service n-cond
 enable_service n-cpu
 disable_service n-net
@@ -209,7 +215,7 @@ function run-tempest {
         echo "Running tempest tests:" > $TEMPEST_RUN_LOG
         echo "" >> $TEMPEST_RUN_LOG
         testr init > /dev/null 2>&1 || true
-        cmd_api="tempest.api.network.test_networks"
+        cmd_api="tempest.api.network.test_networks tempest.api.network.test_networks_negative tempest.api.network.test_ports tempest.api.network.test_routers"
         cmd_net_basic="tempest.scenario.test_network_basic_ops"
         cmd_net_adv="tempest.scenario.test_network_advanced_server_ops"
         cmd="testr run $cmd_api $cmd_net_basic"
