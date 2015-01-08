@@ -248,9 +248,8 @@ function archive-logs {
         cp -r /opt/stack/tempest/tempest.log* $WORKSPACE/logs/tempest
     fi
 
-    stack_logs=$(shopt -s nullglob dotglob; echo /opt/stack/data/logs/*)
-    if (( ${#files} )); then
-        cp -r /opt/stack/data/log/* $WORKSPACE/logs/devstack
+    if [ -d /opt/stack/data/log ]; then
+        cp -a /opt/stack/data/log/* $WORKSPACE/logs/devstack
     fi
 
     if [ -d /opt/stack/opendaylight/opendaylight/logs ]; then
