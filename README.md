@@ -1,4 +1,4 @@
-Overivew
+Overview
 --------
 This is a Vagrant box designed to run the same set of tests the OpenDaylight
 CI system runs for each commit made to both OpenStack Neutron and OpenDaylight
