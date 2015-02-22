@@ -24,6 +24,7 @@ configure-firewall
 install-packages
 install-pip
 #install-tempest
+install-networking-odl
 install-devstack
 # Workaround for bug:
 # https://bugs.launchpad.net/devstack/+bug/1276297

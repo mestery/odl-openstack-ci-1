@@ -276,22 +276,34 @@ function archive-logs {
 }
 
 function test-branch {
-  if [ "$GERRIT_PROJECT" != "" ]; then
-    export GERRIT_HOST=review.openstack.org
-    export GERRIT_PROJECT=openstack/neutron
+    echo-step "Looking to install custom Neutron repository"
+    if [ "$GERRIT_PROJECT" != "" ]; then
+      export GERRIT_HOST=review.openstack.org
+      export GERRIT_PROJECT=openstack/neutron
 
-    # Read in NEUTRON_BRANCH if it's not set
-    if [ "$GERRIT_REFSPEC" == "" ]; then
-      echo "Please enter the branch you want to test: "
-      read GERRIT_REFSPEC
+      # Read in NEUTRON_BRANCH if it's not set
+      if [ "$GERRIT_REFSPEC" == "" ]; then
+          echo "Please enter the branch you want to test: "
+          read GERRIT_REFSPEC
+      fi
+
+      echo "Variables set:"
+      echo "GERRIT_PROJECT: $GERRIT_PROJECT"
+      echo "GERRIT_HOST: $GERRIT_HOST"
+      echo "GERRIT_PROJECT: $GERRIT_PROJECT"
+      echo "GERRIT_REFSPEC: $GERRIT_REFSPEC"
+    else
+      echo "Not testing specific branch, working with origin/master."
+    fi
+}
+
+function install-networking-odl {
+    echo-step "Cloning networking-odl"
+
+    cd /opt/stack
+    if [ ! -d networking-odl ]; then
+        run git clone -q git://git.openstack.org/stackforge/networking-odl.git
     fi
 
-    echo "Variables set:"
-    echo "GERRIT_PROJECT: $GERRIT_PROJECT"
-    echo "GERRIT_HOST: $GERRIT_HOST"
-    echo "GERRIT_PROJECT: $GERRIT_PROJECT"
-    echo "GERRIT_REFSPEC: $GERRIT_REFSPEC"
-  else
-    echo "Not testing specific branch, working with origin/master."
-  fi
+    run sudo python ./setup.py -q install > /dev/null
 }
