@@ -31,6 +31,10 @@ function check-env {
 function prepare-environment {
     echo-step "Creating Devstack Directory"
     run mkdir -p $DEVSTACKDIR
+
+    run sudo mkdir -p /opt/stack
+    run sudo chown $(whoami) /opt/stack
+    run sudo chmod 755 /opt/stack
 }
 
 function configure-firewall {
@@ -67,9 +71,9 @@ function install-packages {
 function install-pip {
     echo-step "Installing python-pip"
     cd $WORKSPACE
-    run curl -O https://pypi.python.org/packages/source/p/pip/pip-1.4.1.tar.gz -s
-    run tar xzvf pip-1.4.1.tar.gz > /dev/null
-    cd $WORKSPACE/pip-1.4.1
+    run curl -O https://pypi.python.org/packages/source/p/pip/pip-6.0.8.tar.gz -s
+    run tar xzvf pip-6.0.8.tar.gz > /dev/null
+    cd $WORKSPACE/pip-6.0.8
     run sudo -E python setup.py -q install
     echo-step "Installing testools"
     run sudo pip install -q testtools
@@ -77,14 +81,29 @@ function install-pip {
 
 function install-tempest {
     echo-step "Cloning and Installing Tempest"
-    run sudo mkdir -p /opt/stack
-    run sudo chown $(whoami) /opt/stack
-    run sudo chmod 755 /opt/stack
     cd /opt/stack
     run git clone -q git://git.openstack.org/openstack/tempest.git
     cd /opt/stack/tempest
     run sudo python ./setup.py -q install > /dev/null
+}
 
+function install-workarounds {
+    echo-step "Work arounds"
+    # Workaround for bug:
+    # https://bugs.launchpad.net/devstack/+bug/1276297
+    run sudo rm -rf /usr/lib/python2.7/site-packages/oslo*
+
+    # Workaround for "keystone not found" issues
+    run sudo rm -rf /usr/lib/python2.7/site-packages/*client*
+
+    # Make sure keystonemiddleware is up to date
+    run sudo pip install --upgrade keystonemiddleware
+
+    # # Workaround: Pull neutron first
+    # cd /opt/stack
+    # git clone -q git://git.openstack.org/openstack/neutron.git
+    # cd neutron
+    # run sudo python ./setup.py -q install
 }
 
 function install-devstack {
@@ -102,8 +121,22 @@ function install-devstack {
     cd $DEVSTACKDIR/devstack
 
     echo-step "Writing local.conf"
-    cat <<EOLLC > local.conf
+    ####
+    # Specify changeset being worked on if it's networking-odl
+    ####
+    if [ "$GERRIT_PROJECT" == "stackforge/networking-odl" ]; then
+        cat <<EOLLC > local.conf
 [[local|localrc]]
+enable_plugin networking-odl https://$GERRIT_HOST/$GERRIT_PROJECT $GERRIT_REFSPEC
+EOLLC
+    else
+        cat <<EOLLC > local.conf
+[[local|localrc]]
+enable_plugin networking-odl https://github.com/stackforge/networking-odl
+EOLLC
+    fi
+
+    cat <<EOLLC >> local.conf
 LOGFILE=stack.sh.log
 SCREEN_LOGDIR=/opt/stack/data/log
 VERBOSE=True
@@ -111,6 +144,7 @@ LOG_COLOR=False
 #OFFLINE=True
 RECLONE=yes
 GIT_TIMEOUT=0
+GIT_BASE=https://git.openstack.org
 
 IFACE_NAME=enp0s8
 HOST_IP=$(ip addr | grep inet | grep enp0s8 | awk -F" " '{print $2}'| sed -e 's/\/.*$//')
@@ -158,6 +192,8 @@ API_RATE_LIMIT=False
 
 Q_PLUGIN=ml2
 Q_ML2_PLUGIN_MECHANISM_DRIVERS=logger,opendaylight
+ODL_MODE=allinone
+ODL_NETVIRT_DEBUG_LOGS=True
 ODL_MGR_IP=\$SERVICE_HOST
 ODL_ARGS="-Xmx1024m -XX:MaxPermSize=512m"
 ODL_BOOT_WAIT=15
@@ -187,6 +223,8 @@ EOLLC
 }
 
 function stack {
+    cd $DEVSTACKDIR/devstack
+
     echo-step "Stacking"
     ./stack.sh > /dev/null
 
@@ -295,15 +333,4 @@ function test-branch {
     else
       echo "Not testing specific branch, working with origin/master."
     fi
-}
-
-function install-networking-odl {
-    echo-step "Cloning networking-odl"
-
-    cd /opt/stack
-    if [ ! -d networking-odl ]; then
-        run git clone -q git://git.openstack.org/stackforge/networking-odl.git
-    fi
-
-    run sudo python ./setup.py -q install > /dev/null
 }

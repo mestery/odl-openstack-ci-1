@@ -24,10 +24,7 @@ configure-firewall
 install-packages
 install-pip
 #install-tempest
-install-networking-odl
 install-devstack
-# Workaround for bug:
-# https://bugs.launchpad.net/devstack/+bug/1276297
-sudo rm -rf /usr/lib/python2.7/site-packages/oslo*
+install-workarounds
 stack
 run-tempest
