@@ -85,6 +85,7 @@ function install-tempest {
     run git clone -q git://git.openstack.org/openstack/tempest.git
     cd /opt/stack/tempest
     run sudo python ./setup.py -q install > /dev/null
+}
 
 function install-workarounds {
     echo-step "Work arounds"
