@@ -290,8 +290,9 @@ function archive-logs {
         cp -a /opt/stack/data/log/* $WORKSPACE/logs/devstack
     fi
 
-    if [ -d /opt/stack/opendaylight/opendaylight/logs ]; then
-        cp -r /opt/stack/opendaylight/opendaylight/logs $WORKSPACE/logs/opendaylight
+    if [ -d /opt/stack/opendaylight ]; then
+        cp -r /opt/stack/opendaylight/*/logs $WORKSPACE/logs/opendaylight
+        cp -r /opt/stack/opendaylight/*/data/log $WORKSPACE/logs/opendaylight
     fi
 
     if [ -f $TEMPEST_RUN_LOG ]; then
