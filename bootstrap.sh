@@ -7,6 +7,11 @@ else
     IS_FEDORA=1
 fi
 
+# Add the jenkins user, and setup passwordless sudo
+groupadd jenkins
+adduser -g jenkins jenkins
+echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
 if [ "$IS_FEDORA" == "1" ]; then
     yum install -q -y deltarpm
     yum install -q -y gcc git python python-crypto python-devel \
