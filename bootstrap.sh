@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Add the jenkins user, and setup passwordless sudo
+groupadd jenkins
+adduser -g jenkins jenkins
+echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
 yum install -q -y deltarpm git python python-crypto python-devel python-lxml python-setuptools @development-tools libxml2-devel libxslt-devel libffi-devel
 
 if [ ! -f /etc/udev/rules.d/80-net-setup-link.rules ]; then
