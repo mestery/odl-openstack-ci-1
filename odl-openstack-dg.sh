@@ -6,7 +6,7 @@
 # https://github.com/openstack-infra/project-config/blob/master/jenkins/jobs/networking-odl.yaml
 
 # *SIGH*. This is required to get lsb_release
-sudo yum -y install redhat-lsb-core indent
+sudo yum -y install redhat-lsb-core indent python-virtualenv
 
 # Add the Jenkins user
 JENKGRP=$(sudo grep jenkins /etc/group)
