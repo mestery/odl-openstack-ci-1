@@ -65,10 +65,19 @@ EOL
 
 function install-packages {
     echo-step "Installing Prerequisite Packages"
-    run sudo yum -q -y install qemu libvirt-daemon
+    if [ "$IS_FEDORA" == "1" ]; then
+        run sudo yum -q -y install qemu libvirt-daemon
+    else
+        run sudo apt-get -y update
+        run sudo apt-get -y install qemu libvirt0
+    fi
 }
 
 function install-pip {
+    if [ "$IS_UBUNTU" == "1" ]; then
+        echo-step "Installing setuptools"
+        run sudo apt-get -y install python-setuptools
+    fi
     echo-step "Installing python-pip"
     cd $WORKSPACE
     run curl -O https://pypi.python.org/packages/source/p/pip/pip-6.0.8.tar.gz -s
@@ -146,7 +155,7 @@ RECLONE=yes
 GIT_TIMEOUT=0
 GIT_BASE=https://git.openstack.org
 
-IFACE_NAME=enp0s8
+#IFACE_NAME=enp0s8
 HOST_IP=$(ip addr | grep inet | grep enp0s8 | awk -F" " '{print $2}'| sed -e 's/\/.*$//')
 HOST_NAME=$(hostname)
 SERVICE_HOST=\$HOST_IP

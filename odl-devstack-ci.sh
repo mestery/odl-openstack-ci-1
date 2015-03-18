@@ -2,6 +2,13 @@
 
 cd "$(dirname "$0")"
 
+# Check for Fedora vs. Ubuntu
+if [ -f "/etc/debian_version" ]; then
+    export IS_UBUNTU=1
+else
+    export IS_FEDORA=1
+fi
+
 export PATH=$PATH:/bin:/sbin:/usr/sbin
 
 # If we are running in vagrant, inject some helpful env vars

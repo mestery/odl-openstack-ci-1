@@ -3,7 +3,18 @@
 # These env vars need injecting in to Vagrant
 # In prod. these are provided by Jenkins
 
+# Check for Fedora vs. Ubuntu
+if [ -f "/etc/debian_version" ]; then
+    IS_UBUNTU=1
+else
+    IS_FEDORA=1
+fi
+
 export WORKSPACE="/home/vagrant"
 export BUILD_TAG="jenkins-openstack-gerrit-1"
-export IFACE_NAME='enp0s8'
+if [ "$IS_FEDORA" == "1" ]; then
+    export IFACE_NAME='enp0s8'
+else
+    export IFACE_NAME='eth1'
+fi
 export BUILD_ID='2014-06-07_18-18-59'

@@ -26,4 +26,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-
+# Ignore odl-ci directories created by vagrant
+centos/odl-ci
+fedora/odl-ci
+ubuntu/odl-ci
