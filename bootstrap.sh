@@ -18,9 +18,9 @@ if [ "$IS_FEDORA" == "1" ]; then
     fi
 else
     apt-get update -y
-    apt-get install git python python-setuptools libxslt1-dev \
-                        libxml2-dev libffi-dev python-lxml python-crypto \
-                        python-dev git
+    apt-get install -y git python python-setuptools libxslt1-dev \
+                       libxml2-dev libffi-dev python-lxml python-crypto \
+                       python-dev git
 fi
 
 echo "***************************************************"

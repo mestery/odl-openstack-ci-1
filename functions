@@ -155,8 +155,17 @@ RECLONE=yes
 GIT_TIMEOUT=0
 GIT_BASE=https://git.openstack.org
 
-#IFACE_NAME=enp0s8
+EOLLC
+    if [ "$IS_FEDORA" == "1" ]; then
+        cat <<EOLLC >> local.conf
 HOST_IP=$(ip addr | grep inet | grep enp0s8 | awk -F" " '{print $2}'| sed -e 's/\/.*$//')
+EOLLC
+    else
+        cat <<EOLLC >> local.conf
+HOST_IP=$(ip addr | grep inet | grep eth1 | awk -F" " '{print $2}'| sed -e 's/\/.*$//')
+EOLLC
+    fi
+    cat <<EOLLC >> local.conf
 HOST_NAME=$(hostname)
 SERVICE_HOST=\$HOST_IP
 SERVICE_HOST_NAME=\$HOST_NAME
@@ -175,8 +184,14 @@ SERVICE_TOKEN=service
 SERVICE_PASSWORD=admin
 ADMIN_PASSWORD=admin
 
+EOLLC
+    if [ "$IS_FEDORA" == "1" ]; then
+        cat <<EOLLC >> local.conf
 disable_service rabbit
 enable_service qpid
+EOLLC
+    fi
+    cat <<EOLLC >> local.conf
 
 disable_service swift
 disable_service cinder
