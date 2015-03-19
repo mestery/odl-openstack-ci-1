@@ -54,8 +54,9 @@ sudo iptables -I INPUT -p udp --dport 4789 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 8774 -j ACCEPT
 
-# For ODL
+# For ODL/Swift
 sudo iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 8087 -j ACCEPT
 EOL
     echo "Firewall Configuration is..."
     run chmod +x $WORKSPACE/firewall.sh
