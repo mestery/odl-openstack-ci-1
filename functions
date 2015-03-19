@@ -185,7 +185,8 @@ SERVICE_PASSWORD=admin
 ADMIN_PASSWORD=admin
 
 EOLLC
-    if [ "$IS_FEDORA" == "1" ]; then
+    # Use qpid instead of rabbit in fedora, excluding centos
+    if [ "$IS_FEDORA" == "1" ] && [ "$IS_CENTOS" != "1" ]; then
         cat <<EOLLC >> local.conf
 disable_service rabbit
 enable_service qpid

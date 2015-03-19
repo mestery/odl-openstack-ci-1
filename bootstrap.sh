@@ -12,7 +12,7 @@ if [ "$IS_FEDORA" == "1" ]; then
     yum install -q -y gcc git python python-crypto python-devel \
                       python-lxml python-setuptools yum-utils \
                       libxml2-devel libxslt-devel libffi-devel
-    yum group install "Development Tools"
+    yum group install -q -y "Development Tools"
     if [ ! -f /etc/udev/rules.d/80-net-setup-link.rules ]; then
         ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
     fi
