@@ -5,8 +5,17 @@
 #
 # https://github.com/openstack-infra/project-config/blob/master/jenkins/jobs/networking-odl.yaml
 
-# *SIGH*. This is required to get lsb_release
-sudo yum -y install redhat-lsb-core indent
+# Check for Fedora vs. Ubuntu
+if [ -f "/etc/debian_version" ]; then
+    IS_UBUNTU=1
+else
+    IS_FEDORA=1
+fi
+
+if [ "$IS_FEDORA" == "1" ]; then
+    # *SIGH*. This is required to get lsb_release
+    sudo yum -y install redhat-lsb-core indent
+fi
 
 # Add the Jenkins user
 JENKGRP=$(sudo grep jenkins /etc/group)
@@ -15,7 +24,12 @@ if [ "$JENKGRP" == "" ]; then
     sudo groupadd jenkins
 fi
 if [ "$JENKUSR" == "" ]; then
-    sudo adduser -g jenkins jenkins
+    if [ "$IS_FEDORA" == "1" ]; then
+        sudo adduser -g jenkins jenkins
+    else
+        JGID=$(cat /etc/group|grep jenkins| cut -d ":" -f 3)
+        sudo adduser --quiet --gid $JGID jenkins
+    fi
 fi
 
 # Run the script as the jenkins user
