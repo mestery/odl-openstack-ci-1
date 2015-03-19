@@ -7,6 +7,9 @@ if [ -f "/etc/debian_version" ]; then
     export IS_UBUNTU=1
 else
     export IS_FEDORA=1
+    if grep -qi centos /etc/redhat-release; then
+	export IS_CENTOS=1
+    fi
 fi
 
 export PATH=$PATH:/bin:/sbin:/usr/sbin
