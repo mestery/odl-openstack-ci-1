@@ -2,6 +2,8 @@
 
 cd "$(dirname "$0")"
 
+STACK_AND_TEST="yes"
+
 # Check for Fedora vs. Ubuntu
 if [ -f "/etc/debian_version" ]; then
     export IS_UBUNTU=1
@@ -36,5 +38,8 @@ install-pip
 #install-tempest
 install-devstack
 install-workarounds
-stack
-run-tempest
+if [ "$STACK_AND_TEST" == "yes" ]; then
+    stack
+    run-tempest
+fi
+
