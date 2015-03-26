@@ -31,7 +31,7 @@ function check-env {
 function prepare-environment {
     echo-step "Creating Devstack Directory"
     run mkdir -p $DEVSTACKDIR
-    run ln -s $DEVSTACKDIR/devstack $WORKSPACE
+    run ln -sf $DEVSTACKDIR/devstack $WORKSPACE
 
     run sudo mkdir -p /opt/stack
     run sudo chown $(whoami) /opt/stack

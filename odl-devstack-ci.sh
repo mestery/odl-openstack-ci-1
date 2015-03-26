@@ -26,8 +26,10 @@ export TEMPEST_RUN_LOG=/tmp/odl_tempest_test_list.txt
 
 source functions
 
-# Archive logs on exit
-trap archive-logs EXIT
+if [ "$STACK_AND_TEST" == "yes" ]; then
+    # Archive logs on exit
+    trap archive-logs EXIT
+fi
 
 test-branch
 check-env
