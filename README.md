@@ -35,11 +35,8 @@ adjust /home/vagrant/devstack/local.conf before calling ./stack.sh
 
 ##### Wireshark
 
-If you are interested in capturing packets, you can use the script below to have
-wireshark installed. In order to forward X11 to the host system, use the '-X' param:
+If you are interested in capturing packets, use the '-X' param as shown below:
 
     vagrant ssh -- -X
-    cd /vagrant/odl-ci
-    sudo ./install_wireshark.sh
     sudo wireshark
 
