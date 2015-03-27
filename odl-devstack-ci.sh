@@ -2,6 +2,8 @@
 
 cd "$(dirname "$0")"
 
+STACK_AND_TEST="yes"
+
 # Check for Fedora vs. Ubuntu
 if [ -f "/etc/debian_version" ]; then
     export IS_UBUNTU=1
@@ -24,8 +26,10 @@ export TEMPEST_RUN_LOG=/tmp/odl_tempest_test_list.txt
 
 source functions
 
-# Archive logs on exit
-trap archive-logs EXIT
+if [ "$STACK_AND_TEST" == "yes" ]; then
+    # Archive logs on exit
+    trap archive-logs EXIT
+fi
 
 test-branch
 check-env
@@ -36,5 +40,8 @@ install-pip
 #install-tempest
 install-devstack
 install-workarounds
-stack
-run-tempest
+if [ "$STACK_AND_TEST" == "yes" ]; then
+    stack
+    run-tempest
+fi
+

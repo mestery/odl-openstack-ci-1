@@ -21,11 +21,16 @@ if [ "$IS_FEDORA" == "1" ]; then
     if [ ! -f /etc/udev/rules.d/80-net-setup-link.rules ]; then
         ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
     fi
+
+    yum install -q -y wireshark xorg-x11-xauth xorg-x11-fonts-* xorg-x11-utils wireshark-gnome
+    # Link root’s .XAutority to vagrant's
+    ln -sf /home/vagrant/.Xauthority /root/
 else
     apt-get update -y
     apt-get install -y git python python-setuptools libxslt1-dev \
                        libxml2-dev libffi-dev python-lxml python-crypto \
                        python-dev git
+    apt-get install -y wireshark
 fi
 
 echo "***************************************************"

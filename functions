@@ -31,6 +31,7 @@ function check-env {
 function prepare-environment {
     echo-step "Creating Devstack Directory"
     run mkdir -p $DEVSTACKDIR
+    run ln -sf $DEVSTACKDIR/devstack $WORKSPACE
 
     run sudo mkdir -p /opt/stack
     run sudo chown $(whoami) /opt/stack
@@ -264,6 +265,8 @@ function stack {
 }
 
 function unstack {
+    cd $DEVSTACKDIR/devstack
+
     echo-step "Unstacking"
     ./unstack.sh > /dev/null
 }
