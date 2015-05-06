@@ -9,7 +9,7 @@ TFILE="/tmp/$(basename $0).$$.tmp"
 trap "rm -f '$TFILE'" exit
 wget --quiet -O ${TFILE}  ${NEXUSPATH}/${BUNDLEVERSION}/maven-metadata.xml
 
-BUNDLE_TIMESTAMP=$(xpath maven-metadata.xml "//snapshotVersion[extension='zip'][1]/value/text()" 2>/dev/null)
+BUNDLE_TIMESTAMP=$(xpath $TFILE "//snapshotVersion[extension='zip'][1]/value/text()" 2>/dev/null)
 ODL_NAME="distribution-karaf-${BUNDLEVERSION}"
 ODL_PKG="distribution-karaf-${BUNDLE_TIMESTAMP}.zip"
 ODL_URL="${NEXUSPATH}/${BUNDLEVERSION}"
