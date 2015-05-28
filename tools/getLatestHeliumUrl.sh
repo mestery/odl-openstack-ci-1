@@ -1,4 +1,4 @@
 #!/bin/bash
 
-BUNDLEVERSION='0.3.0-SNAPSHOT'
+BUNDLEVERSION='0.2.4-SNAPSHOT'
 ./getLatestOdlBundle.sh ${BUNDLEVERSION} $*
